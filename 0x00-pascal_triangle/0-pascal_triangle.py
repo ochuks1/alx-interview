@@ -3,6 +3,7 @@
 Function that returns Pascal's triangle of size n.
 """
 
+
 def pascal_triangle(n):
     """ Returns a list of lists representing Pascal's triangle of n """
     if n <= 0:
