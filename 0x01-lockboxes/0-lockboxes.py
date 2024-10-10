@@ -1,35 +1,37 @@
 #!/usr/bin/python3
+"""
+Module to determine if all lockboxes can be unlocked.
+"""
+
 def canUnlockAll(boxes):
     """
-    This code writes a method that determines if all the boxes can be opened. Given that You have n number of locked boxes in front of you. 
-    Each box is numbered sequentially from 0 to n - 1 and each box may contain keys to the other boxes.
+    Determines if all boxes can be unlocked.
+    
+    Args:
+        boxes (list of lists): A list where each sublist contains keys to open other boxes.
+
+    Returns:
+        bool: True if all boxes can be unlocked, False otherwise.
     """
+    # Number of boxes
+    n = len(boxes)
 
-    n = len(boxes)  # Total number of boxes
-    opened = [False] * n  # A list to track which boxes are opened
-    opened[0] = True  # The first box is unlocked
+    # A set to keep track of unlocked boxes, starting with the first box
+    unlocked = set([0])
 
-    # Stack to simulate DFS (starting from box 0)
-    stack = [0]
+    # A list to keep track of keys we have to unlock other boxes
+    keys = boxes[0].copy()
 
-    # Perform DFS to unlock boxes
-    while stack:
-        current_box = stack.pop()
+    while keys:
+        # Get the next key from the list of keys
+        key = keys.pop(0)
 
-        # Get the keys inside the current box
-        for key in boxes[current_box]:
-            if key < n and not opened[key]:  # If the key opens a valid unopened box
-                opened[key] = True  # Mark the box as opened
-                stack.append(key)  # Add the box to the stack for further exploration
+        # If the key opens a box we haven't opened yet
+        if key not in unlocked and key < n:
+            # Unlock that box
+            unlocked.add(key)
+            # Add the keys inside the newly unlocked box to our list of keys
+            keys.extend(boxes[key])
 
-    # Return True if all boxes are opened, False otherwise
-    return all(opened)
-
-
-# Example usage
-if __name__ == "__main__":
-    boxes1 = [[1], [2], [3], []]  # All boxes can be unlocked
-    print(canUnlockAll(boxes1))  # Output: True
-
-    boxes2 = [[1, 2], [0, 3], [4], [], []]  # Some boxes can't be unlocked
-    print(canUnlockAll(boxes2))  # Output: False
+    # If we unlocked all boxes, return True; otherwise, return False
+    return len(unlocked) == n
