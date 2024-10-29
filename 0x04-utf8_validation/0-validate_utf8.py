@@ -43,4 +43,4 @@ def validUTF8(data):
             num_bytes -= 1
 
     # If num_bytes is 0, all characters were properly validated
-    return num_bytes ==
+    return num_bytes == 0
